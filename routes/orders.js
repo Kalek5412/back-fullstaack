@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
-const { getOrders,postOrders,putOrders,deleteOrders } = require('../controllers/orderController');
+const { getOrders,postOrders,putOrders,deleteOrders,getOrderById } = require('../controllers/orderController');
 const router=Router();
 
 router.get('/', getOrders);
+router.get('/:id',getOrderById);
 router.post('/',[
     check('client_id','el documento es obligatorio').not().isEmpty(),
     check('total','el numro de documento es obligatorio').not().isEmpty(),

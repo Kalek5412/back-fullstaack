@@ -11,19 +11,32 @@ const getBusqueda = async (req, res = response) => {
  
     const books = await Book.findAll({
       where: {
-        name: {
+  /*       name: {
           [Op.like]: `%${busqueda}%`  
-        }
+        },
+    */
+        [Op.or]: [
+          { 
+            name: {
+              [Op.like]: `%${busqueda}%`
+            }
+          },
+          {
+            isbn: {
+              [Op.like]: `%${busqueda}%`
+            }
+          }
+        ]
       }
       });
 
-    // Respuesta de éxito
+   
     res.json({
       ok: true,
       books,
     });
   } catch (error) {
-    // Manejo de errores
+   
     res.status(500).json({
       ok: false,
       msg: "Error al realizar la búsqueda",

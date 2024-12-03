@@ -4,8 +4,45 @@ const Order = require("../models/order");
 const Book = require("../models/book");
 
 const getOrderDetails = async (req = request, res = response) => {
-  const orderDetails = await OrderDetail.findAll();
-  res.json(orderDetails);
+  try {
+    const orderDetails = await OrderDetail.findAll({
+      include: [
+        {
+          model: Order,
+          required: true,
+          attributes: [
+            "id",
+            "client_id",
+            "total",
+            "doc_type",
+            "doc_number",
+            "created_at",
+          ], 
+        },
+        {
+          model: Book,
+          required: true,
+          attributes: [
+            "id",
+            "isbn",
+            "current_price",
+            "stock",
+          ], 
+        },
+      ],
+    });
+
+    res.json({
+      ok: true,
+      orderDetails,
+    });
+  } catch (error) {
+    console.error("Error fetching order details:", error);
+    res.status(500).json({
+      ok: false,
+      msg: "Error fetching order details",
+    });
+  }
 };
 
 const postOrderDetails = async (req = request, res = response) => {
@@ -31,7 +68,7 @@ const postOrderDetails = async (req = request, res = response) => {
          
       });
       res.status(201).json({
-        message: "Order creado exitosamente",
+        message: "Order detalle creado exitosamente",
         order_detail,
       });
     } catch (error) {

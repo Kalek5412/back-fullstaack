@@ -6,9 +6,7 @@ const DOC_TYPE = {
     CARNET_EXTRANJERIA: 3
 };
 
-const Client = db.define(
-  "Client",
-  {
+const Client = db.define(  "Client", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

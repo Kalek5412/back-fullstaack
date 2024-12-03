@@ -6,8 +6,9 @@ const getOrders = async (req = request, res = response) => {
   const orders = await Order.findAll({
     include: {
       model: Client,
+      required:true,
       attributes: [
-       
+        "id",
         "doc_type",
         "doc_number",
         "first_name",
@@ -19,6 +20,44 @@ const getOrders = async (req = request, res = response) => {
   });
   res.json(orders);
 };
+
+const getOrderById = async (req = request, res = response) => {
+  const { id } = req.params; // Obtener el ID de los parámetros de la URL.
+  try {
+    // Buscar la orden por ID incluyendo datos del cliente asociado.
+    const order = await Order.findByPk(id, {
+      include: {
+        model: Client,
+        required: true, // Requiere que el cliente esté asociado.
+        attributes: [
+          "id",
+          "doc_type",
+          "doc_number",
+          "first_name",
+          "last_name",
+          "email",
+          "phone",
+        ],
+      },
+    });
+
+    // Validar si la orden no existe.
+    if (!order) {
+      return res.status(404).json({
+        msg: `No se encontró una orden con el id ${id}`,
+      });
+    }
+
+    // Respuesta exitosa con la orden encontrada.
+    res.json(order);
+  } catch (error) {
+    console.error("Error al buscar la orden:", error);
+    res.status(500).json({
+      msg: "Hable con el administrador",
+    });
+  }
+};
+
 
 const postOrders = async (req = request, res = response) => {
   const { client_id, doc_type, doc_number, total } = req.body;
@@ -91,4 +130,5 @@ module.exports = {
   postOrders,
   putOrders,
   deleteOrders,
+  getOrderById,
 };

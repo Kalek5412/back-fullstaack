@@ -1,10 +1,7 @@
 require('dotenv').config()
 const Server = require('./models/server')
 const db = require('./database/config'); 
-//const Book = require('./models/book');
-//const Client = require('./models/client');
-//const Order = require('./models/order');
-//const OrderDetail = require('./models/orderDetail');
+
 
 
 const server=new Server();

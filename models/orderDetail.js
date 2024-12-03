@@ -4,7 +4,7 @@ const Order =require('../models/order')
 const Book =require('../models/book')
 
 const OrderDetail = db.define('orderDetail', {
-    order_detail_id: {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
@@ -39,9 +39,9 @@ const OrderDetail = db.define('orderDetail', {
   });
 
   OrderDetail.belongsTo(Order, { foreignKey: 'order_id' }); // Relación con Client
-  Order.hasMany(OrderDetail, { foreignKey: 'book_id' });   // Relación con Order
-
   OrderDetail.belongsTo(Book, { foreignKey: 'book_id' }); // Relación con Client
+
   Book.hasMany(OrderDetail, { foreignKey: 'book_id' });   // Relación con Order
+  Order.hasMany(OrderDetail, { foreignKey: 'order_id' });   // Relación con Order
 
   module.exports   = OrderDetail;
